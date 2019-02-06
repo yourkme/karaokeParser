@@ -1,7 +1,7 @@
 {
   "name": "karaokeparser",
   "version": "1.0.0",
-  "description": "",
+  "description": "korean karaoke device song parsing page",
   "main": "index.js",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
@@ -13,5 +13,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevYourK/karaokeParser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DevYourK/karaokeParser/issues"
+  },
+  "homepage": "https://github.com/DevYourK/karaokeParser#readme"
 }

@@ -5,8 +5,10 @@ const express = require('express');
 const app = express();
 
 async function tjmedia(search) {
-    let $ = cheerio.load((await request('http://www.tjmedia.co.kr/tjsong/song_search_list.asp?strCond=0&strType=0&strText='+encodeURI(search))));
+    let $ = cheerio.load((await request('http://www.tjmedia.co.kr/tjsong/song_search_list.asp?strCond=0&strType=0&strText='+encodeURI(search))).body);
     let data = [];
+    console.log((await request('http://www.tjmedia.co.kr/tjsong/song_search_list.asp?strCond=0&strType=0&strText='+encodeURI(search))));
+    console.log($(this).html());
 
     if(search==='39953' || ("무선랜설치가이드").indexOf(search) > -1) {
         data.push('39953', '무선랜설치가이드<TJ미디어 미제공값>', 'TJ미디어', 'TJ미디어', 'TJ미디어');
@@ -38,7 +40,7 @@ async function tjmedia(search) {
 }
 
 async function kumyoung(search) {
-    let $ = cheerio.load((await request('http://m.kyentertainment.kr/songsearch/search.asp?gb=1&s_value='+encodeURI(search))));
+    let $ = cheerio.load((await request('http://m.kyentertainment.kr/songsearch/search.asp?gb=1&s_value='+encodeURI(search))).body);
     let data = [];
 
     $('section > div[class=table1] > table > tbody > tr > td').each(function (i){
@@ -102,33 +104,6 @@ app.get('/:provider/:id', (req, res)=>{
         case 'ky':
             kumyoung(req.params.id).then((songslist)=>{
                 res.send(songslist);
-            });
-        break;
-    }
-});
-
-app.get('/read/:provider/:id', (req,res)=>{
-    console.log('접속자 발생 - 결과반환형');
-    let arrResult = "";
-    switch(req.params.provider){
-        case 'tj':
-            tjmedia(req.params.id).then((songlist)=>{
-                songlist.forEach((elem)=>{
-                    arrResult += elem.id + '번의 ' + elem.title + ', ';
-                });
-                if(arrResult.length <= 0) {arrResult = "결과가 없습니다"}
-                let result = '요청하신 ' + req.params.id + '의 검색 결과는 아래와 같습니다. ' + arrResult + '이상입니다.';
-                res.send(result);
-            });
-        break;
-        case 'ky':
-            kumyoung(req.params.id).then((songlist)=>{
-                songlist.forEach((elem)=>{
-                    arrResult += elem.id + '번의 ' + elem.title + ', ';
-                });
-                if(arrResult.length <= 0) {arrResult = "결과가 없습니다"}
-                let result = '요청하신 ' + req.params.id + '의 검색 결과는 아래와 같습니다. ' + arrResult + '이상입니다.';
-                res.send(result);
             });
         break;
     }
