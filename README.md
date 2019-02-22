@@ -1,2 +1,3 @@
 # karaokeParser
-korean karaoke device song parsing page
+TJmedia, KYEntertainment's karaoke song number parser
+this app require ExpressJS, Cheerio
