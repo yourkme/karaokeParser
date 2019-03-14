@@ -7,8 +7,6 @@ const app = express();
 async function tjmedia(search) {
     let $ = cheerio.load((await request('http://www.tjmedia.co.kr/tjsong/song_search_list.asp?strCond=0&strType=0&strText='+encodeURI(search))).body);
     let data = [];
-    console.log((await request('http://www.tjmedia.co.kr/tjsong/song_search_list.asp?strCond=0&strType=0&strText='+encodeURI(search))));
-    console.log($(this).html());
 
     if(search==='39953' || ("무선랜설치가이드").indexOf(search) > -1) {
         data.push('39953', '무선랜설치가이드<TJ미디어 미제공값>', 'TJ미디어', 'TJ미디어', 'TJ미디어');
@@ -86,7 +84,7 @@ async function kumyoung(search) {
     return processedData;
 }
 
-app.get('/:provider/:id', (req, res)=>{
+app.get('/:provider/:id', async (req, res)=>{
 
     let ip = req.headers['x-forwarded-for'] ||
             req.connection.remoteAddress ||
@@ -97,14 +95,10 @@ app.get('/:provider/:id', (req, res)=>{
     
     switch(req.params.provider){
         case 'tj':
-            tjmedia(req.params.id).then((songslist)=>{
-                res.send(songslist);
-            });
+            res.send((await tjmedia(req.params.id)));
         break;
         case 'ky':
-            kumyoung(req.params.id).then((songslist)=>{
-                res.send(songslist);
-            });
+            res.send((await kumyoung(req.params.id)));
         break;
     }
 });
