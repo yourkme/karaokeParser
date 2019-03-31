@@ -1,8 +1,6 @@
 const request = require('./request');
 const cheerio = require('cheerio');
-
-const express = require('express');
-const app = express();
+const app = require('express')();
 
 async function tjmedia(search) {
     let $ = cheerio.load((await request('http://www.tjmedia.co.kr/tjsong/song_search_list.asp?strCond=0&strType=0&strText='+encodeURI(search))).body);
@@ -84,15 +82,7 @@ async function kumyoung(search) {
     return processedData;
 }
 
-app.get('/:provider/:id', async (req, res)=>{
-
-    let ip = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-            req.socket.remoteAddress ||
-            req.connection.socket.remoteAddress;
-
-    console.log('접속자 발생 - json API' + ip);
-    
+app.get('/:provider/:id', async (req, res)=>{    
     switch(req.params.provider){
         case 'tj':
             res.send((await tjmedia(req.params.id)));
